@@ -1,10 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  IsStrongPassword,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
 import { Match } from 'src/utils/decorators/match.decorator';
 
 export class RegisterReqBody {
@@ -20,16 +15,15 @@ export class RegisterReqBody {
   name: string;
 
   @ApiProperty({
-    name: 'email',
-    description: 'Email of the user',
+    name: 'phone',
+    description: 'Phone number of the user',
     required: true,
     type: String,
-    example: 'abcxyz@123.co',
+    example: '0123456789',
   })
   @IsString()
-  @IsEmail()
   @IsNotEmpty()
-  email: string;
+  phone: string;
 
   @ApiProperty({
     name: 'password',
@@ -71,16 +65,15 @@ export class RegisterReqBody {
 
 export class LoginReqBody {
   @ApiProperty({
-    name: 'email',
-    description: 'Email of the user',
+    name: 'phone',
+    description: 'Phone number of the user',
     required: true,
     type: String,
-    example: 'abcxyz@123.co',
+    example: '0123456789',
   })
   @IsString()
-  @IsEmail()
   @IsNotEmpty()
-  email: string;
+  phone: string;
 
   @ApiProperty({
     name: 'password',

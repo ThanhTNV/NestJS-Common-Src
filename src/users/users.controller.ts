@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Post,
-  Query,
   Req,
   UnauthorizedException,
   UseGuards,
@@ -18,14 +17,13 @@ import {
 } from './users.request';
 import {
   AccessTokenAuthGuard,
-  EmailVerifyTokenAuthGuard,
   RefreshTokenAuthGuard,
   RoleAuthGuard,
 } from 'src/auth/auth.guard';
 import { Roles } from 'src/utils/decorators/role.decorator';
-import { UserRole, UserVerifyStatus } from './user.dto';
+import { UserRole } from './user.dto';
 import { Request } from 'express';
-import { ApiBody, ApiHeader, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiResponse } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
@@ -52,7 +50,7 @@ export class UsersController {
   })
   @ApiResponse({
     status: 201,
-    description: 'Email is already existed',
+    description: 'Phone number is already registered',
     schema: {
       example: {
         message: 'Email is already existed',
@@ -69,11 +67,11 @@ export class UsersController {
     },
   })
   async register(@Body(new ValidationPipe()) body: RegisterReqBody) {
-    const { email } = body;
-    const isExistedEmail = await this.usersService.checkEmail(email);
-    if (isExistedEmail) {
+    const { phone } = body;
+    const isExistedPhone = await this.usersService.checkPhone(phone);
+    if (isExistedPhone) {
       return {
-        message: 'Email is already existed',
+        message: 'Phone number is already registered',
       };
     }
     const result = await this.usersService.register(body);
@@ -128,58 +126,6 @@ export class UsersController {
     return {
       message: 'Login successfully',
       result: tokens,
-    };
-  }
-
-  @Get('email-verify')
-  @ApiQuery({
-    name: 'email_verify_token',
-    required: true,
-    type: String,
-    description: 'Email verify token',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Email verified successfully | Email is already verified | User is banned | Email verify token is invalid or expired',
-    schema: {
-      example: {
-        message:
-          'Email verified successfully | Email is already verified | User is banned | Email verify token is invalid or expired',
-      },
-    },
-  })
-  @UseGuards(EmailVerifyTokenAuthGuard)
-  async emailVerify(
-    @Query('email_verify_token') email_verify_token: string,
-    @Req() req: Request,
-  ) {
-    const { user_id } = req.decoded_email_verify;
-    const userStatus = await this.usersService.checkVerifyStatus(user_id);
-    if (userStatus === UserVerifyStatus.VERIFIED) {
-      return {
-        message: 'Email is already verified',
-      };
-    } else if (userStatus === UserVerifyStatus.BANNED) {
-      return {
-        message: 'User is banned',
-      };
-    }
-    const isvalidToken = await this.usersService.checkEmailVerifyToken({
-      email_verify_token,
-      user_id,
-    });
-    if (!isvalidToken) {
-      return {
-        message: 'Email verify token is invalid or expired',
-      };
-    }
-    await this.usersService.emailVerify({
-      email_verify_token,
-      user_id,
-    });
-    return {
-      message: 'Email verified successfully',
     };
   }
 

@@ -1,46 +1,50 @@
+
 interface UserType {
   id?: string;
-  username?: string;
   name: string;
-  email: string;
+  phone: string;
   password: string;
   created_at?: Date;
   updated_at?: Date;
-  email_verify_token?: string;
-  forgot_password_token?: string;
-  verify_status?: UserVerifyStatus;
   role?: UserRole;
+  status?: UserStatus;
 }
 
 export class UserDto {
   id?: string;
-  username?: string;
   name: string;
-  email: string;
+  phone: string;
   password: string;
   created_at: Date;
   updated_at: Date;
-  email_verify_token: string;
-  forgot_password_token: string;
-  verify_status: UserVerifyStatus;
   role: UserRole;
+  status: UserStatus;
 
   constructor(userData: UserType) {
+    this.id = userData.id;
     this.name = userData.name;
-    this.email = userData.email;
+    this.phone = userData.phone;
     this.password = userData.password;
     this.created_at = userData.created_at || new Date();
     this.updated_at = userData.updated_at || new Date();
-    this.email_verify_token = userData.email_verify_token || '';
-    this.forgot_password_token = userData.forgot_password_token || '';
-    this.verify_status = userData.verify_status || UserVerifyStatus.UNVERIFIED;
     this.role = userData.role || UserRole.USER;
+    this.status = userData.status || UserStatus.ACTIVE;
   }
 }
+/*
+id?: string
+name: string
+phone: string
+password: string
+created_at: Date | string
+updated_at: Date | string
+role: number
+status: number
+*/
 
-export enum UserVerifyStatus {
-  UNVERIFIED,
-  VERIFIED,
+export enum UserStatus {
+  ACTIVE,
+  INACTIVE,
   BANNED,
 }
 

@@ -3,16 +3,33 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class DatabaseService {
-  private prisma: PrismaClient;
-  constructor() {
-    this.prisma = new PrismaClient();
+  private readonly prisma = new PrismaClient();
+
+  get Address() {
+    return this.prisma.address;
   }
 
-  get Users() {
-    return this.prisma.users;
+  get Fish() {
+    return this.prisma.fish;
   }
 
-  get Tokens() {
-    return this.prisma.tokens;
+  get Order() {
+    return this.prisma.order;
+  }
+
+  get Post() {
+    return this.prisma.post;
+  }
+
+  get Team() {
+    return this.prisma.team;
+  }
+
+  get Token() {
+    return this.prisma.token;
+  }
+
+  get User() {
+    return this.prisma.user;
   }
 }

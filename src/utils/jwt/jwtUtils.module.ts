@@ -3,7 +3,7 @@ import { JwtUtilsService } from './jwtUtils.service';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [JwtModule],
+  imports: [JwtModule, JwtUtilsModule],
   providers: [JwtUtilsService],
   exports: [JwtUtilsService],
 })
