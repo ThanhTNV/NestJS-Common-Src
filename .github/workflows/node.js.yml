@@ -24,5 +24,8 @@ jobs:
     - name: Dump GitHub context
       run: |
         echo "${{github.event_name}}"
-        echo "${{github.event_name == 'push'}}"
         echo "${{github.base_ref}}"
+        echo "${{github.head_ref}}"
+    - name: Test event
+      if: "${{github.event_name == 'pull_request'}}"
+      run: echo "Run on pull_request"
