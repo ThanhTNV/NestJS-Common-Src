@@ -26,7 +26,7 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: |
         echo "$GITHUB_CONTEXT"
-        echo "$GITHUB_CONTEXT.base_ref"
+        echo "${{github.base_ref}}"
     - name: Dump job context
       env:
         JOB_CONTEXT: ${{ toJson(job) }}
